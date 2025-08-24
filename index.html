@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blitz - Loja Esportiva</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'blitz-black': '#000000',
+                        'blitz-white': '#FFFFFF',
+                        'blitz-gray': '#F5F5F5',
+                    },
+                    fontFamily: {
+                        'montserrat': ['Montserrat', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom styles */
+        .hero-pattern {
+            background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(245,245,245,1) 100%);
+        }
+        .product-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        .category-filter {
+            transition: all 0.3s ease;
+        }
+        .category-filter:hover {
+            background-color: black;
+            color: white;
+        }
+        .cart-notification {
+            animation: slideIn 0.5s forwards;
+        }
+        @keyframes slideIn {
+            from { right: -100px; opacity: 0; }
+            to { right: 20px; opacity: 1; }
+        }
+        .mobile-menu {
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+        .mobile-menu.open {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body class="font-montserrat bg-blitz-white text-blitz-black">
+    <!-- Cart Notification -->
+    <div id="cart-notification" class="fixed top-24 right-5 z-50 bg-black text-white px-6 py-3 rounded-lg shadow-lg hidden cart-notification">
+        <span class="font-medium">Produto adicionado ao carrinho!</span>
+    </div>
+
+    <!-- Header -->
+    <header class="sticky top-0 z-40 bg-blitz-white border-b border-gray-200 shadow-sm">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between py-4">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <a href="#" class="text-2xl font-bold">
+                        <img src="Blitz.jpg" alt="Blitz" class="h-12">
+                    </a>
+                </div>
+
+                <!-- Desktop Navigation -->
+                <nav class="hidden md:flex space-x-8">
+                    <a href="#" class="font-medium hover:text-gray-600 transition-colors">Masculino</a>
+                    <a href="#" class="font-medium hover:text-gray-600 transition-colors">Feminino</a>
+                    <a href="#" class="font-medium hover:text-gray-600 transition-colors">Infantil</a>
+                    <a href="#" class="font-medium hover:text-gray-600 transition-colors">Esportes</a>
+                    <a href="#" class="font-medium hover:text-gray-600 transition-colors">Marcas</a>
+                </nav>
+
+                <!-- Right Icons -->
+                <div class="flex items-center space-x-5">
+                    <div class="hidden md:block relative">
+                        <input type="text" placeholder="Pesquisar" class="bg-blitz-gray px-4 py-2 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-black">
+                        <i class="fas fa-search absolute right-3 top-2.5 text-gray-400"></i>
+                    </div>
+                    <a href="#" class="hover:text-gray-600">
+                        <i class="far fa-user text-xl"></i>
+                    </a>
+                    <a href="#" class="hover:text-gray-600 relative">
+                        <i class="far fa-heart text-xl"></i>
+                    </a>
+                    <a href="#" class="hover:text-gray-600 relative">
+                        <i class="fas fa-shopping-bag text-xl"></i>
+                        <span class="absolute -top-2 -right-2 bg-black text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                    </a>
+                    <button id="mobile-menu-button" class="md:hidden">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="mobile-menu fixed inset-y-0 left-0 w-64 bg-white shadow-lg z-50 p-6 md:hidden">
+            <div class="flex justify-between items-center mb-10">
+                <img src="Blitz.jpg" alt="Blitz" class="h-10">
+                <button id="close-menu">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <div class="mb-6">
+                <input type="text" placeholder="Pesquisar" class="w-full bg-blitz-gray px-4 py-2 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-black">
+            </div>
+            <nav class="flex flex-col space-y-6">
+                <a href="#" class="font-medium hover:text-gray-600 transition-colors">Masculino</a>
+                <a href="#" class="font-medium hover:text-gray-600 transition-colors">Feminino</a>
+                <a href="#" class="font-medium hover:text-gray-600 transition-colors">Infantil</a>
+                <a href="#" class="font-medium hover:text-gray-600 transition-colors">Esportes</a>
+                <a href="#" class="font-medium hover:text-gray-600 transition-colors">Marcas</a>
+                <a href="#" class="font-medium hover:text-gray-600 transition-colors">Minha Conta</a>
+                <a href="#" class="font-medium hover:text-gray-600 transition-colors">Lista de Desejos</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-pattern py-16 md:py-24">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-10 md:mb-0">
+                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">ELEVE SEU <span class="bg-black text-white px-2">JOGO</span></h1>
+                    <p class="text-lg md:text-xl mb-8 text-gray-700">Performance, estilo e inovação para atletas que buscam superar limites.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="bg-black text-white px-8 py-3 rounded-full font-medium hover:bg-gray-800 transition-colors">Comprar Agora</a>
+                        <a href="#" class="border border-black px-8 py-3 rounded-full font-medium hover:bg-black hover:text-white transition-colors">Explorar</a>
+                    </div>
+                </div>
+                <div class="md:w-1/2 flex justify-center">
+                    <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" alt="Tênis esportivo" class="rounded-lg shadow-xl w-full max-w-md">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section class="py-16 bg-blitz-gray">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12">CATEGORIAS EM DESTAQUE</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <a href="#" class="group">
+                    <div class="bg-white rounded-lg overflow-hidden shadow-md transition-transform duration-300 hover:shadow-xl">
+                        <div class="h-48 overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=464&q=80" alt="Tênis" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                        </div>
+                        <div class="p-4 text-center">
+                            <h3 class="font-bold">Tênis</h3>
+                        </div>
+                    </div>
+                </a>
+                <a href="#" class="group">
+                    <div class="bg-white rounded-lg overflow-hidden shadow-md transition-transform duration-300 hover:shadow-xl">
+                        <div class="h-48 overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1551028719-00167b16eac5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=435&q=80" alt="Roupas" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                        </div>
+                        <div class="p-4 text-center">
+                            <h3 class="font-bold">Roupas</h3>
+                        </div>
+                    </div>
+                </a>
+                <a href="#" class="group">
+                    <div class="bg-white rounded-lg overflow-hidden shadow-md transition-transform duration-300 hover:shadow-xl">
+                        <div class="h-48 overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1586953208448-b95a79798f07?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" alt="Acessórios" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                        </div>
+                        <div class="p-4 text-center">
+                            <h3 class="font-bold">Acessórios</h3>
+                        </div>
+                    </div>
+                </a>
+                <a href="#" class="group">
+                    <div class="bg-white rounded-lg overflow-hidden shadow-md transition-transform duration-300 hover:shadow-xl">
+                        <div class="h-48 overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" alt="Equipamentos" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                        </div>
+                        <div class="p-4 text-center">
+                            <h3 class="font-bold">Equipamentos</h3>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Products -->
+    <section class="py-16">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center mb-10">
+                <h2 class="text-3xl font-bold">LANÇAMENTOS</h2>
+                <a href="#" class="text-black font-medium hover:underline">Ver todos</a>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Product 1 -->
+                <div class="product-card bg-white rounded-lg overflow-hidden shadow-md">
+                    <div class="relative overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1025&q=80" alt="Tênis Blitz Runner" class="w-full h-64 object-cover">
+                        <button class="absolute top-3 right-3 bg-white rounded-full p-2 shadow-md hover:bg-black hover:text-white transition-colors">
+                            <i class="far fa-heart"></i>
+                        </button>
+                        <button onclick="showCartNotification()" class="absolute bottom-3 left-3 bg-black text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-gray-800 transition-colors">Adicionar ao Carrinho</button>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold mb-1">Blitz Runner Pro</h3>
+                        <p class="text-gray-600 text-sm mb-2">Tênis de corrida</p>
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold">R$ 299,90</span>
+                            <div class="flex">
+                                <i class="fas fa-star text-yellow-400"></i>
+                                <i class="fas fa-star text-yellow-400"></i>
+                                <i class="fas fa-star text-yellow-400"></i>
+                                <i class="fas fa-star text-yellow-400"></i>
+                                <i class="fas fa-star-half-alt text-yellow-400"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 2 -->
+                <div class="product-card bg-white rounded-lg overflow-hidden shadow-md">
+                    <div class="relative overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1556821840-3a63f95609a7?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=434&q=80" alt="Camiseta Blitz" class="w-full h-64 object-cover">
+                        <button class="absolute top-3 right-3 bg-white rounded-full p-2 shadow-md hover:bg-black hover:text-white transition-colors">
+                            <i class="far fa-heart"></i>
+                        </button>
+                        <button onclick="showCartNotification()" class="absolute bottom-3 left-3 bg-black text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-gray-800 transition-colors">Adicionar ao Carrinho</button>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold mb-1">Camiseta Blitz Dry-Fit</h3>
+                        <p class="text-gray-600 text-sm mb-2">Camiseta esportiva</p>
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold">R$ 129,90</span>
+                            <div class="flex">
+                                <i class="fas fa-star text-yellow-400"></i>
+                                <i class="fas fa-star text-yellow-400"></i>
+                                <i class="fas fa-star text-yellow-400"></i>
+                                <i class="fas fa-star text-yellow-400"></i>
+                                <i class="far fa-star text-yellow-400"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 3 -->
+                <div class="product-card bg-white rounded-lg overflow-hidden shadow-md">
+                    <div class="relative overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80" alt="Bola Blitz" class="w-full h-64 object-cover">
+                        <button class="absolute top-3 right-3 bg-white rounded-full p-2 shadow-md hover:bg-black hover:text-white transition-colors">
+                            <i class="far fa-heart"></i>
+                        </button>
+                        <button onclick="showCartNotification()" class="absolute bottom-3 left-3 bg-black text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-gray-800 transition-colors">Adicionar ao Carrinho</button>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold mb-1">Bola Blitz Soccer</h3>
+                        <p class="text-gray-600 text-sm mb-2">Bola de futebol oficial</p>
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold">R$ 199,90</span>
+                            <div class="flex">
+                                <i class="fas fa-star text-yellow-400"></i>
+                                <i class="fas fa-star text-yellow-400"></i>
+                                <i class="fas fa-star text-yellow-400"></i>
+                                <i class="fas fa-star text-yellow-400"></i>
+                                <i class="fas fa-star text-yellow-400"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 4 -->
+                <div class="product-card bg-white rounded-lg overflow-hidden shadow-md">
+                    <div class="relative overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1576678927484-cc907957088c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80" alt="Moletom Blitz" class="w-full h-64 object-cover">
+                        <button class="absolute top-3 right-3 bg-white rounded-full p-2 shadow-md hover:bg-black hover:text-white transition-colors">
+                            <i class="far fa-heart"></i>
+                        </button>
+                        <button onclick="showCartNotification()" class="absolute bottom-3 left-3 bg-black text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-gray-800 transition-colors">Adicionar ao Carrinho</button>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold mb-1">Moletom Blitz Hoodie</h3>
+                        <p class="text-gray-600 text-sm mb-2">Moletom com capuz</p>
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold">R$ 249,90</span>
+                            <div class="flex">
+                                <i class="fas fa-star text-yellow-400"></i>
+                                <i class="fas fa-star text-yellow-400"></i>
+                                <i class="fas fa-star text-yellow-400"></i>
+                                <i class="fas fa-star text-yellow-400"></i>
+                                <i class="fas fa-star-half-alt text-yellow-400"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Brand Story -->
+    <section class="py-16 bg-black text-white">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-10 md:mb-0">
+                    <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" alt="Atleta" class="rounded-lg shadow-xl w-full">
+                </div>
+                <div class="md:w-1/2 md:pl-12">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-6">A MARCA BLITZ</h2>
+                    <p class="text-lg mb-6">Nascida da paixão pelo esporte e pela inovação, a Blitz combina tecnologia de ponta com design minimalista para oferecer produtos que elevam o desempenho atlético.</p>
+                    <p class="text-lg mb-8">Nossos produtos são desenvolvidos com atletas profissionais para garantir o máximo de conforto, durabilidade e estilo. Do campo à quadra, das pistas às academias, Blitz está com você em cada movimento.</p>
+                    <a href="#" class="bg-white text-black px-8 py-3 rounded-full font-medium hover:bg-gray-200 transition-colors">Conheça Nossa História</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="py-16 bg-blitz-gray">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl font-bold mb-4">JUNTE-SE AO TIME BLITZ</h2>
+            <p class="text-lg text-gray-700 mb-8 max-w-2xl mx-auto">Cadastre-se para receber novidades, lançamentos exclusivos e descontos especiais.</p>
+            <form class="max-w-md mx-auto flex">
+                <input type="email" placeholder="Seu e-mail" class="flex-grow bg-white px-4 py-3 rounded-l-full focus:outline-none focus:ring-2 focus:ring-black">
+                <button type="submit" class="bg-black text-white px-6 py-3 rounded-r-full font-medium hover:bg-gray-800 transition-colors">Inscrever</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div>
+                    <img src="Blitz.jpg" alt="Blitz" class="h-10 mb-4">
+                    <p class="text-gray-400">Performance, estilo e inovação para atletas que buscam superar limites.</p>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg mb-4">PRODUTOS</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Tênis</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Roupas</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Acessórios</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Equipamentos</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg mb-4">SUPORTE</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">FAQ</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Entrega</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Devoluções</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Trocas</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg mb-4">CONTATO</h3>
+                    <ul class="space-y-2">
+                        <li class="text-gray-400">contato@blitz.com.br</li>
+                        <li class="text-gray-400">+55 (11) 99999-9999</li>
+                        <li class="flex space-x-4 pt-2">
+                            <a href="#" class="text-gray-400 hover:text-white transition-colors"><i class="fab fa-instagram text-xl"></i></a>
+                            <a href="#" class="text-gray-400 hover:text-white transition-colors"><i class="fab fa-facebook text-xl"></i></a>
+                            <a href="#" class="text-gray-400 hover:text-white transition-colors"><i class="fab fa-twitter text-xl"></i></a>
+                            <a href="#" class="text-gray-400 hover:text-white transition-colors"><i class="fab fa-youtube text-xl"></i></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-10 pt-6 text-center text-gray-400">
+                <p>© Blitz. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu Toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const closeMenu = document.getElementById('close-menu');
+
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        });
+
+        closeMenu.addEventListener('click', () => {
+            mobileMenu.classList.remove('open');
+            document.body.style.overflow = 'auto';
+        });
+
+        // Cart Notification
+        function showCartNotification() {
+            const notification = document.getElementById('cart-notification');
+            notification.classList.remove('hidden');
+            
+            setTimeout(() => {
+                notification.classList.add('hidden');
+            }, 3000);
+        }
+
+        // Simple cart counter
+        let cartCount = 0;
+        const cartButtons = document.querySelectorAll('button[onclick="showCartNotification()"]');
+        
+        cartButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                cartCount++;
+                document.querySelector('.fa-shopping-bag + span').textContent = cartCount;
+            });
+        });
+    </script>
+</body>
+</html>
